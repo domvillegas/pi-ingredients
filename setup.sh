@@ -32,7 +32,7 @@ source venv/bin/activate
 pip install --upgrade pip & spinner $!
 
 echo -e "${GREEN}Installing Python dependencies in virtual environment...${NO_COLOR}"
-pip install pygame & spinner $!
+pip install pygame evdev & spinner $!
 
 echo -e "${GREEN}Setup complete. To activate the virtual environment, run:${NO_COLOR}"
 echo -e "${GREEN}  source venv/bin/activate${NO_COLOR}"
