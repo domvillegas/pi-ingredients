@@ -1,6 +1,6 @@
 import os
 import threading
-from evdev import InputDevice, categorize, ecodes
+from venv import InputDevice, categorize, ecodes
 
 def find_keyboard_device():
     input_by_id = '/dev/input/by-id'
