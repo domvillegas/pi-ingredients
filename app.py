@@ -5,8 +5,14 @@ def on_plus():
     print("You pressed +")
 
 def on_esc():
-    print("Escape pressed, exiting...")
+    print("Exiting...")
     listener.stop()
+
+def on_any_key(keycode):
+    print(f"Key pressed: {keycode}")
+
+listener = KeyListener()
+listener.on_key("KEY_ESC", lambda: listener.stop())
 
 listener = KeyListener()
 listener.on_key("KEY_PLUS", on_plus)
