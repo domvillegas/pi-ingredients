@@ -11,12 +11,16 @@ def on_esc():
 def on_any_key(keycode):
     print(f"Key pressed: {keycode}")
 
+def key_press_handler(keycode):
+    on_any_key(keycode)
+    on_esc()
+
+
 listener = KeyListener()
 listener.on_key("KEY_ESC", lambda: listener.stop())
 
 listener = KeyListener()
-listener.on_key("KEY_PLUS", on_plus)
-listener.on_key("KEY_ESC", on_esc)
+listener.on_key("KEY_PLUS", key_press_handler)
 
 listener.start()
 
