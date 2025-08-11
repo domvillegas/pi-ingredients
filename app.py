@@ -1,15 +1,15 @@
 from src.utils.key_listener import KeyListener
 import time
 
-def on_a():
-    print("You pressed A!")
+def on_plus():
+    print("You pressed +")
 
 def on_esc():
     print("Escape pressed, exiting...")
     listener.stop()
 
 listener = KeyListener()
-listener.on_key("KEY_A", on_a)
+listener.on_key("KEY_PLUS", on_plus)
 listener.on_key("KEY_ESC", on_esc)
 
 listener.start()
