@@ -27,7 +27,10 @@ def main():
     for event in dev.read_loop():
         if event.type == ecodes.EV_KEY:
             key_event = categorize(event)
-            if key_event.keystate == key_event.key_down:
+            if (
+                key_event.keystate == key_event.key_down
+                and key_event.keycode != 'KEY_NUMLOCK'
+            ):
                 print(f"Key pressed: {key_event.keycode}")
 
 if __name__ == "__main__":
