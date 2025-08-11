@@ -21,9 +21,10 @@ spinner() {
 echo -e "${GREEN}Updating package lists...${NO_COLOR}"
 sudo apt update & spinner $!
 
-echo -e "${GREEN}Installing system dependencies...${NO_COLOR}"
-sudo apt install -y python3 python3-venv python3-pip & spinner $!
+echo -e "${GREEN}Installing system dependencies (Python, build tools, curl)...${NO_COLOR}"
+sudo apt install -y python3 python3-venv python3-pip curl build-essential & spinner $!
 
+# --- Python setup ---
 echo -e "${GREEN}Creating Python virtual environment...${NO_COLOR}"
 python3 -m venv venv
 
@@ -34,5 +35,32 @@ pip install --upgrade pip & spinner $!
 echo -e "${GREEN}Installing Python dependencies in virtual environment...${NO_COLOR}"
 pip install pygame evdev & spinner $!
 
-echo -e "${GREEN}Setup complete. To activate the virtual environment, run:${NO_COLOR}"
+deactivate
+
+# --- Node.js setup ---
+echo -e "${GREEN}Checking for Node.js...${NO_COLOR}"
+if ! command -v node &> /dev/null
+then
+    echo -e "${GREEN}Node.js not found, installing Node.js LTS...${NO_COLOR}"
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - & spinner $!
+    sudo apt install -y nodejs & spinner $!
+else
+    echo -e "${GREEN}Node.js found: $(node -v)${NO_COLOR}"
+fi
+
+echo -e "${GREEN}Setting up Node.js webhook project...${NO_COLOR}"
+mkdir -p ~/webhook_listener
+cd ~/webhook_listener
+
+if [ ! -f package.json ]; then
+    npm init -y & spinner $!
+fi
+
+echo -e "${GREEN}Installing Node.js dependencies (express)...${NO_COLOR}"
+npm install express & spinner $!
+
+echo -e "${GREEN}Setup complete!${NO_COLOR}"
+echo -e "${GREEN}To activate Python virtual environment, run:${NO_COLOR}"
 echo -e "${GREEN}  source venv/bin/activate${NO_COLOR}"
+echo -e "${GREEN}To start your Node.js webhook server, run:${NO_COLOR}"
+echo -e "${GREEN}  node ~/webhook_listener/server.js${NO_COLOR}"
