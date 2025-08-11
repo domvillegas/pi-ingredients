@@ -21,7 +21,8 @@ class KeyListener:
     def __init__(self):
         self.device_path = find_keyboard_device()
         self.dev = InputDevice(self.device_path)
-        self.callbacks = {}  # keycode -> list of functions
+        self.callbacks = {}         # keycode -> list of functions
+        self.global_callbacks = []  # functions to call for ANY key
         self.running = False
 
     def on_key(self, keycode, callback):
@@ -29,6 +30,10 @@ class KeyListener:
         if keycode not in self.callbacks:
             self.callbacks[keycode] = []
         self.callbacks[keycode].append(callback)
+
+    def on_any_key(self, callback):
+        """Register a callback for ANY key press (callback receives keycode)."""
+        self.global_callbacks.append(callback)
 
     def start(self):
         """Start the listener in a separate thread."""
@@ -52,7 +57,10 @@ class KeyListener:
                     key_event.keystate == key_event.key_down
                     and key_event.keycode != 'KEY_NUMLOCK'
                 ):
-                    callbacks = self.callbacks.get(key_event.keycode, [])
-                    for cb in callbacks:
-                        cb()  # call registered callbacks
+                    # Call global callbacks
+                    for cb in self.global_callbacks:
+                        cb(key_event.keycode)
 
+                    # Call per-key callbacks
+                    for cb in self.callbacks.get(key_event.keycode, []):
+                        cb()
