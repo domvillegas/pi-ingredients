@@ -57,12 +57,12 @@ echo -e "${GREEN}Installing Node.js dependencies (express)...${NO_COLOR}"
 npm install express & spinner $!
 
 # --- ngrok setup ---
-echo -e "${GREEN}Downloading and installing ngrok...${NO_COLOR}"
+echo -e "${GREEN}Downloading and installing ngrok v3...${NO_COLOR}"
 cd ~
 if [ ! -f ngrok ]; then
-    wget -q https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip
-    unzip -o ngrok-stable-linux-arm.zip
-    rm ngrok-stable-linux-arm.zip
+    wget -q https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-arm.zip
+    unzip -o ngrok-v3-stable-linux-arm.zip
+    rm ngrok-v3-stable-linux-arm.zip
     chmod +x ngrok
 else
     echo -e "${GREEN}ngrok already installed.${NO_COLOR}"
