@@ -1,4 +1,4 @@
-const startWebhookListener = require("../webhook-listener/server.js");
+const startWebhookListener = require("../../webhook-listener/server.js");
 
 const config = {
   secret: "the-big-secret",
