@@ -59,8 +59,22 @@ fi
 echo -e "${GREEN}Installing Node.js dependencies (express)...${NO_COLOR}"
 npm install express & spinner $!
 
+# --- ngrok setup ---
+echo -e "${GREEN}Downloading and installing ngrok...${NO_COLOR}"
+cd ~
+if [ ! -f ngrok ]; then
+    wget -q https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip
+    unzip -o ngrok-stable-linux-arm.zip
+    rm ngrok-stable-linux-arm.zip
+    chmod +x ngrok
+else
+    echo -e "${GREEN}ngrok already installed.${NO_COLOR}"
+fi
+
 echo -e "${GREEN}Setup complete!${NO_COLOR}"
 echo -e "${GREEN}To activate Python virtual environment, run:${NO_COLOR}"
 echo -e "${GREEN}  source venv/bin/activate${NO_COLOR}"
 echo -e "${GREEN}To start your Node.js webhook server, run:${NO_COLOR}"
 echo -e "${GREEN}  node ~/webhook_listener/server.js${NO_COLOR}"
+echo -e "${GREEN}To start ngrok tunnel manually, run:${NO_COLOR}"
+echo -e "${GREEN}  ~/ngrok http 5000${NO_COLOR}"
