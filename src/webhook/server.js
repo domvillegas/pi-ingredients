@@ -1,14 +1,10 @@
-// TODO: update this path
-const startWebhookListener = require('./webhookListener');
+const startWebhookListener = require("../webhook-listener/server.js");
 
-// TODO: use a real config
 const config = {
-  secret: 'your_webhook_secret_here',
-  repoPath: '/home/pi/yourrepo',
+  secret: "the-big-secret",
+  repoPath: "/pi-ingredients",
   port: 5000,
-  routePath: '/webhook',
+  routePath: "/webhook",
 };
 
 startWebhookListener(config);
-
-// Eventually, you'll run this with `node server.js`
