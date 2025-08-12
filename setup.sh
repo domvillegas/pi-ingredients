@@ -48,9 +48,6 @@ else
     echo -e "${GREEN}Node.js found: $(node -v)${NO_COLOR}"
 fi
 
-echo -e "${GREEN}Setting up Node.js webhook project...${NO_COLOR}"
-mkdir -p ~/webhook_listener
-cd ~/webhook_listener
 
 if [ ! -f package.json ]; then
     npm init -y & spinner $!
