@@ -57,15 +57,32 @@ echo -e "${GREEN}Installing Node.js dependencies (express)...${NO_COLOR}"
 npm install express & spinner $!
 
 # --- ngrok setup ---
-echo -e "${GREEN}Downloading and installing ngrok v3...${NO_COLOR}"
+echo -e "${GREEN}Checking ngrok version...${NO_COLOR}"
 cd ~
-if [ ! -f ngrok ]; then
+
+if [ -f ngrok ]; then
+    # Get current installed version
+    INSTALLED_VERSION=$(./ngrok version | awk '{print $3}')
+    MIN_VERSION="3.7.0"
+
+    # Compare versions (using sort -V for version sorting)
+    if [ "$(printf '%s\n%s' "$MIN_VERSION" "$INSTALLED_VERSION" | sort -V | head -n1)" = "$MIN_VERSION" ] && [ "$INSTALLED_VERSION" != "$MIN_VERSION" ]; then
+        echo -e "${GREEN}ngrok version $INSTALLED_VERSION is older than $MIN_VERSION, updating...${NO_COLOR}"
+        NEED_UPDATE=1
+    else
+        echo -e "${GREEN}ngrok version $INSTALLED_VERSION is up to date.${NO_COLOR}"
+        NEED_UPDATE=0
+    fi
+else
+    echo -e "${GREEN}ngrok not found, installing...${NO_COLOR}"
+    NEED_UPDATE=1
+fi
+
+if [ "$NEED_UPDATE" -eq 1 ]; then
     wget -q https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-arm.zip
     unzip -o ngrok-v3-stable-linux-arm.zip
     rm ngrok-v3-stable-linux-arm.zip
     chmod +x ngrok
-else
-    echo -e "${GREEN}ngrok already installed.${NO_COLOR}"
 fi
 
 echo -e "${GREEN}Setup complete!${NO_COLOR}"
