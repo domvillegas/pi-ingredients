@@ -37,17 +37,28 @@ pip install pygame evdev & spinner $!
 
 deactivate
 
-# --- Node.js setup ---
+# --- Node.js setup for armv6l (Pi Zero, Pi 1) ---
 echo -e "${GREEN}Checking for Node.js...${NO_COLOR}"
 if ! command -v node &> /dev/null
 then
-    echo -e "${GREEN}Node.js not found, installing Node.js LTS...${NO_COLOR}"
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - & spinner $!
-    sudo apt install -y nodejs & spinner $!
+    echo -e "${GREEN}Node.js not found, installing ARMv6-compatible Node.js v10.24.1...${NO_COLOR}"
+
+    NODE_VERSION="v10.24.1"
+    NODE_DISTRO="node-${NODE_VERSION}-linux-armv6l"
+    NODE_ARCHIVE="${NODE_DISTRO}.tar.xz"
+
+    cd /tmp
+    wget -q "https://unofficial-builds.nodejs.org/download/release/${NODE_VERSION}/${NODE_ARCHIVE}"
+    tar -xf "${NODE_ARCHIVE}"
+    sudo cp -r "${NODE_DISTRO}"/* /usr/local/
+    rm -rf "${NODE_DISTRO}" "${NODE_ARCHIVE}"
 else
     echo -e "${GREEN}Node.js found: $(node -v)${NO_COLOR}"
 fi
 
+echo -e "${GREEN}Setting up Node.js project...${NO_COLOR}"
+mkdir -p ~/webhook_listener
+cd ~/webhook_listener
 
 if [ ! -f package.json ]; then
     npm init -y & spinner $!
@@ -61,11 +72,9 @@ echo -e "${GREEN}Checking ngrok version...${NO_COLOR}"
 cd ~
 
 if [ -f ngrok ]; then
-    # Get current installed version
     INSTALLED_VERSION=$(./ngrok version | awk '{print $3}')
     MIN_VERSION="3.7.0"
 
-    # Compare versions (using sort -V for version sorting)
     if [ "$(printf '%s\n%s' "$MIN_VERSION" "$INSTALLED_VERSION" | sort -V | head -n1)" = "$MIN_VERSION" ] && [ "$INSTALLED_VERSION" != "$MIN_VERSION" ]; then
         echo -e "${GREEN}ngrok version $INSTALLED_VERSION is older than $MIN_VERSION, updating...${NO_COLOR}"
         NEED_UPDATE=1
